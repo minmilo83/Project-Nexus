@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Nexus | minmilo83 控制台</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-glow"></div>
+
+    <div class="console-wrapper">
+        <header>
+            <div class="top-bar">
+                <div class="system-id">
+                    <span class="pulse-dot"></span>
+                    <span class="label">NODE:</span>
+                    <span class="value">MINMILO-PC</span>
+                </div>
+                <div class="system-time" id="clock">00:00:00</div>
+            </div>
+            
+            <div class="title-area">
+                <h1>PROJECT <span class="accent">NEXUS</span></h1>
+                <div class="scanline"></div>
+                <p class="glitch-text">GitHub 儲存庫自動化整合介面 V1.0</p>
+            </div>
+        </header>
+
+        <main>
+            <section class="module">
+                <h2 class="module-title">[ SECTION_01: FEATURED_WORKS ]</h2>
+                <div class="grid-container" id="featured-grid">
+                    <div class="status-msg">正在掃描核心存儲庫...</div>
+                </div>
+            </section>
+
+            <section class="module">
+                <h2 class="module-title">[ SECTION_02: ARCHIVE_SCRIPTS ]</h2>
+                <div class="grid-container" id="other-grid">
+                    </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-line"></div>
+            <p>© 2026 A minmilo83 Production. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
+                           now.getMinutes().toString().padStart(2, '0') + ':' + 
+                           now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
