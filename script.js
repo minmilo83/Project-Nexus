@@ -3,21 +3,26 @@ const featuredGrid = document.getElementById('featured-grid');
 const otherGrid = document.getElementById('other-grid');
 
 /**
- * --- 子路徑手動配置區 ---
- * 這裡定義每個 Repository 除了主頁以外的其他分頁
+ * --- 子路徑精確配置區 ---
+ * 這裡我們手動修正你提到的網址結構問題
  */
 const extraLinks = {
     'My-HTML-Vibe': [
         { name: 'OmniSearch V6', path: 'OmniSearch_V6.html' },
         { name: 'OmniSearch V5', path: 'OmniSearch_V5.html' },
+        { name: 'OmniSearch V4', path: 'OmniSearch_V4.html' }, // 補上 V4
+        { name: 'OmniSearch V3', path: 'OmniSearch_V3.html' }, // 補上 V3
+        { name: 'OmniSearch V2', path: 'OmniSearch_V2.html' }, // 補上 V2
         { name: 'OmniSearch V1', path: 'OmniSearch_V1.html' }
     ],
     'Notebook': [
-        { name: 'Maker Section', path: 'Maker/' },
-        { name: 'Natural Science', path: 'Natural-Science/' }
+        { name: 'Maker Section', path: 'Maker/index.html' },
+        // 修正 Nature Science：如果是資料夾裡的特定檔案，路徑要寫到底
+        { name: 'Nature Science - Physics', path: 'Natural-Science/physics.html' }, 
+        { name: 'Nature Science - Chemistry', path: 'Natural-Science/chemistry.html' }
     ],
     'Script': [
-        { name: 'Demo Book', path: 'library/demo-book/' },
+        // 這裡只保留你要的，過濾掉其他小說文字檔
         { name: 'Shelf System', path: 'shelf.html' }
     ],
     'Horse-Year-Card': [
@@ -37,7 +42,6 @@ async function fetchMyProjects() {
         repos.forEach(repo => {
             if (repo.name.toLowerCase() === 'project-nexus') return;
 
-            // 1. 偵測主展示網址
             let demoUrl = repo.homepage;
             if (!demoUrl && repo.has_pages) {
                 demoUrl = `https://${username}.github.io/${repo.name}/`;
@@ -46,14 +50,11 @@ async function fetchMyProjects() {
             const repoUrl = repo.html_url;
             const subPages = extraLinks[repo.name] || [];
 
-            // --- 核心修復：網址完整性處理 ---
+            // 網址拼接邏輯優化
             let subPagesHtml = '';
             if (demoUrl) {
-                // 確保 base 結尾一定有 /
                 const base = demoUrl.endsWith('/') ? demoUrl : `${demoUrl}/`;
-                
                 subPagesHtml = subPages.map(link => {
-                    // 確保 path 開頭沒有 /
                     const cleanPath = link.path.startsWith('/') ? link.path.substring(1) : link.path;
                     return `<a href="${base}${cleanPath}" target="_blank">${link.name}</a>`;
                 }).join('');
@@ -62,7 +63,6 @@ async function fetchMyProjects() {
             const card = document.createElement('div');
             card.className = 'project-card';
             
-            // 2. 組合卡片 HTML (配合 CSS .dropdown 結構)
             card.innerHTML = `
                 <div class="card-header">
                     <span class="repo-lang">${repo.language || 'Code'}</span>
@@ -92,7 +92,6 @@ async function fetchMyProjects() {
                 </div>
             `;
 
-            // 3. 分類
             if (repo.topics.includes('works')) {
                 featuredGrid.appendChild(card);
             } else {
