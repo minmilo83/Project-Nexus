@@ -1,0 +1,30 @@
+/* --- 追加的標籤與分類樣式 --- */
+.card-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.tag {
+    font-size: 10px;
+    color: var(--primary);
+    background: rgba(0, 255, 204, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.repo-lang {
+    font-size: 12px;
+    opacity: 0.6;
+    float: right;
+}
+
+.section-title {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+    margin-top: 50px;
+    letter-spacing: 2px;
+    color: var(--primary); /* 讓標題也帶點科技綠 */
+}
