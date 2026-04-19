@@ -2,7 +2,7 @@
 :root {
     --glass-bg: rgba(255, 255, 255, 0.45);
     --glass-border: rgba(255, 255, 255, 0.6);
-    --primary-accent: #74b9ff; /* 輕快藍 */
+    --primary-accent: #74b9ff; 
     --text-main: #444a5e;
     --text-sub: #7b8599;
 }
@@ -19,7 +19,7 @@ body {
     display: flex;
     justify-content: center;
     
-    /* 七彩流動漸層：高明度、低飽和度 */
+    /* 七彩流動漸層背景 */
     background: linear-gradient(-45deg, 
         #fce4ec, #f3e5f5, #e8eaf6, #e3f2fd, 
         #e0f2f1, #f1f8e9, #fffde7, #fff3e0);
@@ -47,7 +47,7 @@ body {
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
 }
 
-/* --- 頂部狀態列與標題 --- */
+/* --- 頂部狀態列與呼吸燈 --- */
 .top-bar {
     display: flex;
     justify-content: space-between;
@@ -58,17 +58,23 @@ body {
     margin-bottom: 30px;
 }
 
+/* 七彩呼吸燈：顏色會隨背景調性變換 */
 .pulse-dot {
-    height: 8px; width: 8px;
-    background-color: #55efc4;
+    height: 10px;
+    width: 10px;
     border-radius: 50%;
     display: inline-block;
-    box-shadow: 0 0 8px #55efc4;
-    animation: blink 2s infinite;
-    margin-right: 5px;
+    margin-right: 8px;
+    background: linear-gradient(45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+    background-size: 200% 200%;
+    animation: rainbowPulse 4s ease infinite;
 }
 
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+@keyframes rainbowPulse {
+    0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(161, 196, 253, 0.7); background-position: 0% 50%; }
+    50% { transform: scale(1.1); box-shadow: 0 0 12px 4px rgba(250, 208, 196, 0.4); background-position: 100% 50%; }
+    100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(161, 196, 253, 0); background-position: 0% 50%; }
+}
 
 header h1 {
     font-size: 2.6rem;
@@ -85,7 +91,6 @@ header h1 {
     margin: 40px 0 20px;
     border-left: 3px solid var(--primary-accent);
     padding-left: 12px;
-    letter-spacing: 1px;
 }
 
 /* --- 網格與卡片 --- */
@@ -103,18 +108,15 @@ header h1 {
     transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .project-card:hover {
     background: rgba(255, 255, 255, 0.6);
     transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
 }
 
-.project-card h3 { margin: 12px 0; font-size: 1.25rem; color: #2d3436; }
-.project-card p { font-size: 0.85rem; color: var(--text-sub); flex-grow: 1; line-height: 1.5; }
-
-/* --- 按鈕組與下拉選單核心 --- */
+/* --- 下拉選單核心 (修復點不到的問題) --- */
 .main-buttons {
     display: flex;
     gap: 10px;
@@ -125,7 +127,19 @@ header h1 {
 .dropdown {
     position: relative;
     display: flex;
-    flex: 2; /* 讓 VIEW 按鈕區域較大 */
+    flex: 2;
+}
+
+/* 建立一個隱形的橋樑層，填補按鈕與選單之間的縫隙 */
+.dropdown::after {
+    content: "";
+    position: absolute;
+    bottom: 100%; /* 指向選單彈出的方向 */
+    left: 0;
+    width: 100%;
+    height: 20px; /* 橋樑高度 */
+    display: none;
+    z-index: 98;
 }
 
 .btn {
@@ -142,11 +156,7 @@ header h1 {
     background: var(--primary-accent);
     color: white;
     flex-grow: 1;
-}
-
-.btn-primary:hover {
-    background: #0984e3;
-    box-shadow: 0 4px 15px rgba(116, 185, 255, 0.4);
+    border-radius: 12px 0 0 12px;
 }
 
 .btn-outline {
@@ -155,11 +165,6 @@ header h1 {
     color: var(--primary-accent);
 }
 
-.btn-outline:hover {
-    background: rgba(116, 185, 255, 0.1);
-}
-
-/* 下拉箭頭按鈕 */
 .dropdown-toggle {
     background: rgba(255, 255, 255, 0.2);
     border: none;
@@ -168,26 +173,15 @@ header h1 {
     padding: 0 12px;
     border-radius: 0 12px 12px 0;
     cursor: pointer;
-    font-size: 0.6rem;
 }
 
-.btn-primary {
-    border-radius: 12px 0 0 12px; /* 為了配合右側箭頭，左側按鈕切換半圓角 */
-}
-
-/* 沒有下拉選單時，主按鈕恢復全圓角 */
-.dropdown:not(:has(.dropdown-menu a)) .btn-primary {
-    border-radius: 12px;
-}
-
-/* 下拉菜單面板 */
 .dropdown-menu {
     display: none;
     position: absolute;
-    bottom: 115%; /* 向上彈出避免被卡片擋住 */
+    bottom: calc(100% + 5px); /* 向上彈出，並留出一點點美學空隙 */
     left: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border: 1px solid var(--glass-border);
     border-radius: 15px;
@@ -196,9 +190,10 @@ header h1 {
     overflow: hidden;
 }
 
-.dropdown:hover .dropdown-menu {
+/* 懸停觸發：包含橋樑層 */
+.dropdown:hover .dropdown-menu,
+.dropdown:hover::after {
     display: block;
-    animation: slideIn 0.3s ease-out;
 }
 
 .dropdown-menu a {
@@ -215,11 +210,7 @@ header h1 {
     color: white;
 }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
+/* 標籤樣式 */
 .tag {
     font-size: 0.65rem;
     background: rgba(116, 185, 255, 0.15);
