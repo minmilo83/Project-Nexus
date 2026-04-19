@@ -1,120 +1,238 @@
-/* --- 基礎美學設定 --- */
+/* --- 核心美學變數 --- */
 :root {
     --glass-bg: rgba(255, 255, 255, 0.45);
     --glass-border: rgba(255, 255, 255, 0.6);
-    --accent-color: #74b9ff;
-    --text-color: #2d3436;
+    --primary-accent: #74b9ff; /* 輕快藍 */
+    --text-main: #444a5e;
+    --text-sub: #7b8599;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    padding: 0;
-    font-family: 'JetBrains Mono', 'PingFang TC', sans-serif;
-    color: var(--text-color);
     min-height: 100vh;
-    /* 動態流動漸層背景 */
-    background: linear-gradient(-45deg, #e3f2fd, #f3e5f5, #e8f5e9, #fff3e0);
-    background-size: 400% 400%;
-    animation: gradientFlow 15s ease infinite;
+    font-family: 'JetBrains Mono', 'PingFang TC', sans-serif;
+    color: var(--text-main);
     display: flex;
     justify-content: center;
+    
+    /* 七彩流動漸層：高明度、低飽和度 */
+    background: linear-gradient(-45deg, 
+        #fce4ec, #f3e5f5, #e8eaf6, #e3f2fd, 
+        #e0f2f1, #f1f8e9, #fffde7, #fff3e0);
+    background-size: 400% 400%;
+    animation: rainbowFlow 20s ease infinite;
 }
 
-@keyframes gradientFlow {
+@keyframes rainbowFlow {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-/* --- 玻璃質感容器 --- */
+/* --- 玻璃質感外殼 --- */
 .console-wrapper {
     width: 90%;
-    max-width: 1000px;
-    margin: 50px 0;
-    padding: 40px;
+    max-width: 1100px;
+    margin: 40px 0;
+    padding: 35px;
     background: var(--glass-bg);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid var(--glass-border);
-    border-radius: 30px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border-radius: 28px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
 }
 
-/* --- 標題與文字 --- */
+/* --- 頂部狀態列與標題 --- */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-sub);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+.pulse-dot {
+    height: 8px; width: 8px;
+    background-color: #55efc4;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px #55efc4;
+    animation: blink 2s infinite;
+    margin-right: 5px;
+}
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
 header h1 {
-    font-size: 2.8rem;
-    margin-bottom: 10px;
-    letter-spacing: 2px;
-    background: linear-gradient(45deg, #6c5ce7, #0984e3);
+    font-size: 2.6rem;
+    margin: 0;
+    letter-spacing: -1px;
+    background: linear-gradient(45deg, #74b9ff, #a29bfe);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .module-title {
-    margin: 40px 0 20px;
-    color: #636e72;
     font-size: 0.9rem;
-    border-left: 5px solid var(--accent-color);
-    padding-left: 15px;
+    color: var(--text-sub);
+    margin: 40px 0 20px;
+    border-left: 3px solid var(--primary-accent);
+    padding-left: 12px;
+    letter-spacing: 1px;
 }
 
-/* --- 按鈕模塊與卡片 --- */
+/* --- 網格與卡片 --- */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 25px;
 }
 
 .project-card {
-    background: rgba(255, 255, 255, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 20px;
-    padding: 25px;
-    transition: 0.4s;
-    text-decoration: none;
-    color: inherit;
+    padding: 24px;
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     flex-direction: column;
 }
 
 .project-card:hover {
-    transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.6);
+    transform: translateY(-8px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
 }
 
-.button-group {
+.project-card h3 { margin: 12px 0; font-size: 1.25rem; color: #2d3436; }
+.project-card p { font-size: 0.85rem; color: var(--text-sub); flex-grow: 1; line-height: 1.5; }
+
+/* --- 按鈕組與下拉選單核心 --- */
+.main-buttons {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     margin-top: 20px;
+    width: 100%;
+}
+
+.dropdown {
+    position: relative;
+    display: flex;
+    flex: 2; /* 讓 VIEW 按鈕區域較大 */
 }
 
 .btn {
-    flex: 1;
-    padding: 10px;
-    text-align: center;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: bold;
     text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 10px;
+    border-radius: 12px;
     transition: 0.3s;
+    text-align: center;
 }
 
 .btn-primary {
-    background: var(--accent-color);
+    background: var(--primary-accent);
     color: white;
+    flex-grow: 1;
+}
+
+.btn-primary:hover {
+    background: #0984e3;
+    box-shadow: 0 4px 15px rgba(116, 185, 255, 0.4);
 }
 
 .btn-outline {
-    border: 1px solid var(--accent-color);
-    color: var(--accent-color);
+    flex: 1;
+    border: 1px solid var(--primary-accent);
+    color: var(--primary-accent);
+}
+
+.btn-outline:hover {
+    background: rgba(116, 185, 255, 0.1);
+}
+
+/* 下拉箭頭按鈕 */
+.dropdown-toggle {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    padding: 0 12px;
+    border-radius: 0 12px 12px 0;
+    cursor: pointer;
+    font-size: 0.6rem;
+}
+
+.btn-primary {
+    border-radius: 12px 0 0 12px; /* 為了配合右側箭頭，左側按鈕切換半圓角 */
+}
+
+/* 沒有下拉選單時，主按鈕恢復全圓角 */
+.dropdown:not(:has(.dropdown-menu a)) .btn-primary {
+    border-radius: 12px;
+}
+
+/* 下拉菜單面板 */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    bottom: 115%; /* 向上彈出避免被卡片擋住 */
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    z-index: 100;
+    overflow: hidden;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+    animation: slideIn 0.3s ease-out;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 12px 18px;
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 0.8rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-menu a:hover {
+    background: var(--primary-accent);
+    color: white;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .tag {
-    font-size: 0.7rem;
-    background: rgba(116, 185, 255, 0.2);
+    font-size: 0.65rem;
+    background: rgba(116, 185, 255, 0.15);
     color: #0984e3;
     padding: 3px 10px;
-    border-radius: 50px;
+    border-radius: 20px;
     margin-right: 5px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 60px;
+    font-size: 0.8rem;
+    color: var(--text-sub);
+    opacity: 0.6;
 }
