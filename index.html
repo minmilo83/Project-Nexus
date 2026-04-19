@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Nexus | Mimi's Hub</title>
+    <title>Project Nexus | Mimi's Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -14,7 +14,7 @@
             <div class="top-bar">
                 <div class="status">
                     <span class="pulse-dot"></span>
-                    <span class="system-text">SYSTEM: ONLINE</span>
+                    <span id="node-id">NODE: MINMILO-PC</span>
                 </div>
                 <div class="clock" id="live-clock">00:00:00</div>
             </div>
@@ -27,13 +27,13 @@
 
         <main>
             <section class="module">
-                <h2 class="module-title">// FEATURED_WORKS</h2>
+                <h2 class="module-title">| [ SECTION_01: FEATURED_WORKS ]</h2>
                 <div class="grid-container" id="featured-grid">
                     </div>
             </section>
 
             <section class="module">
-                <h2 class="module-title">// ARCHIVE_SCRIPTS</h2>
+                <h2 class="module-title">| [ SECTION_02: ARCHIVE_SCRIPTS ]</h2>
                 <div class="grid-container" id="other-grid">
                     </div>
             </section>
@@ -47,12 +47,15 @@
     <script src="script.js"></script>
 
     <script>
-        function updateTime() {
+        function updateClock() {
             const now = new Date();
-            document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-GB');
+            const timeString = now.getHours().toString().padStart(2, '0') + ":" + 
+                               now.getMinutes().toString().padStart(2, '0') + ":" + 
+                               now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('live-clock').innerText = timeString;
         }
-        setInterval(updateTime, 1000);
-        updateTime();
+        setInterval(updateClock, 1000);
+        updateClock();
     </script>
 </body>
 </html>
